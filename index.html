@@ -94,12 +94,15 @@ tr:hover {
         transform: translateY(0);
     }
 } 
-    </style>
+    
+</style>
 
 </head>
-<body><img src="Rose.JPG"><header style="background:#2c3e50; padding:20px; text-align:center; color:white;">
-    پروژه مطالعات اجتماعی – قاره آسیا
-</header><hr>
+<body>
+    <header style="background:black; color:white; text-align:center; padding:15px; font-weight:bold;">
+پروژه مطالعات اجتماعی - قاره آسیا
+</header>
+<hr>
 <p style="text-align:center; margin-top:30px;">
 طراحی شده برای کنفرانس درس مطالعات اجتماعی – کلاس هشتم
 </p>
@@ -107,7 +110,7 @@ tr:hover {
 <div class="container">
 
     <h1>ویژگی‌های انسانی و اقتصادی قاره آسیا</h1>
-<img src="asia-map.jpg" style="width:100%; border-radius:10px; margin:20px 0;">
+<img src="asia-map.jpg">
     <h2>معرفی قاره اسیا
     <p>
 قاره آسیا بزرگ‌ترین و پرجمعیت‌ترین قاره جهان است و حدود نیمی از جمعیت
@@ -194,5 +197,80 @@ function showMessage() {
     document.getElementById("extra").style.display = "block";
 }
 </script>
+<h2 style="text-align:center;">نظرسنجی کنفرانس</h2>
+
+<div style="text-align:center; margin-top:20px;">
+
+<label><input type="radio" name="vote" value="excellent"> عالی بود</label><br><br>
+<label><input type="radio" name="vote" value="normal"> معمولی بود</label><br><br>
+<label><input type="radio" name="vote" value="bad"> نیاز به بهبود داشت</label><br><br>
+
+<button onclick="submitVote()" style="padding:10px 20px; background:#0077cc; color:white; border:none; border-radius:8px;">
+ثبت رأی
+</button>
+
+<p id="message" style="margin-top:15px; color:green;"></p>
+
+</div>
+
+<hr style="margin:40px 0;">
+
+<h3 style="text-align:center;">نتایج زنده</h3>
+
+<div style="width:60%; margin:20px auto;">
+<p>عالی بود: <span id="excellentCount">0</span></p>
+<div style="background:#eee; height:20px;">
+<div id="excellentBar" style="background:green; height:20px; width:0%;"></div>
+</div>
+
+<p>معمولی بود: <span id="normalCount">0</span></p>
+<div style="background:#eee; height:20px;">
+<div id="normalBar" style="background:orange; height:20px; width:0%;"></div>
+</div>
+
+<p>نیاز به بهبود داشت: <span id="badCount">0</span></p>
+<div style="background:#eee; height:20px;">
+<div id="badBar" style="background:red; height:20px; width:0%;"></div>
+</div>
+</div>
+
+<script>
+let votes = JSON.parse(localStorage.getItem("votes")) || {
+  excellent: 0,
+  normal: 0,
+  bad: 0
+};
+
+function submitVote() {
+  const selected = document.querySelector('input[name="vote"]:checked');
+  const message = document.getElementById("message");
+
+  if (!selected) {
+    message.innerHTML = "⚠️ لطفا یک گزینه انتخاب کن";
+    message.style.color = "red";
+    return;
+  }
+
+  votes[selected.value]++;
+  localStorage.setItem("votes", JSON.stringify(votes));
+
+  message.innerHTML = "✅ رأی ثبت شد!";
+  message.style.color = "green";
+
+  updateResults();
+}
+
+function updateResults() {
+  const total = votes.excellent + votes.normal + votes.bad;
+
+  document.getElementById("excellentCount").innerText = votes.excellent;
+  document.getElementById("normalCount").innerText = votes.normal;
+  document.getElementById("badCount").innerText = votes.bad;
+
+  document.getElementById("excellentBar").style.width = total ? (votes.excellent / total * 100) + "%" : "0%";
+  document.getElementById("normalBar").style.width = total ? (votes.normal / total * 100) + "%" : "0%";
+  document.getElementById("badBar").style.width = total ? (votes.bad / total * 100) + "%" : "0%";
+}
+
+updateResults();
 </body>
-</html>
